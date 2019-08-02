@@ -3,6 +3,18 @@ import zeep
 import inquirer
 import re
 
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 def main():
     print("===============================")
     print("Check a VAT number against VIES")
@@ -22,7 +34,21 @@ def main():
     answers = inquirer.prompt(questions)
     countrycode = answers['country']
     vat = answers['vat']
-    print(checkvat(countrycode, vat))
+    vat_response = checkvat(countrycode, vat)
+    if not vat_response['valid']:
+        print('')
+        print(bcolors.FAIL + 'VAT number is invalid!' + bcolors.ENDC)
+        print('')
+    else:
+        print('')
+        print(bcolors.OKGREEN + 'VAT number is valid!' + bcolors.ENDC)
+        print('')
+        print(bcolors.BOLD + 'Request date: ' + bcolors.ENDC + vat_response['requestDate'].strftime('%d %b %Y'))
+        print(bcolors.BOLD + 'VAT number: ' + bcolors.ENDC + vat_response['countryCode'] + ' ' + vat_response['vatNumber'])
+        print(bcolors.BOLD + 'Company name: ' + bcolors.ENDC + vat_response['name'])
+        print(bcolors.BOLD + 'Address: ' + bcolors.ENDC)
+        print(vat_response['address'])
+        print('')
 
 
 def checkvat(countrycode, vat):
