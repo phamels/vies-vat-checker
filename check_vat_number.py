@@ -28,7 +28,7 @@ def main():
                       ),
 
         inquirer.Text('vat', message="VAT number to check",
-                      validate=lambda _, x: re.match('^[-+]?[0-9]+$', x),
+                      validate=lambda _, x: re.match('^[0-9]+$', x),
                       )
     ]
     answers = inquirer.prompt(questions)
